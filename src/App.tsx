@@ -9,11 +9,9 @@ function App() {
       {/* Hero Section centrée */}
       <section className="flex flex-col items-center justify-center min-h-screen bg-[#1a0d0a]">
         <div className="flex items-center justify-center">
-          {/* Logo W Wild Code School exact */}
-          <div className="mr-6">
-            <svg width="120" height="48" viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M18.5 18.5C18.5 18.5 18.5 101.5 58.5 101.5C98.5 101.5 98.5 18.5 98.5 18.5C98.5 18.5 98.5 101.5 138.5 101.5C178.5 101.5 178.5 18.5 178.5 18.5C178.5 18.5 178.5 101.5 218.5 101.5C258.5 101.5 258.5 18.5 258.5 18.5" stroke="#ff4a7d" strokeWidth="16" strokeLinecap="round" fill="none"/>
-            </svg>
+          {/* Logo WCS image */}
+          <div className="mr-6 flex-shrink-0 flex items-center">
+            <img src="/wcs-logo.png" alt="Logo Wild Code School" className="w-20 h-20 object-contain" />
           </div>
           {/* Texte titre */}
           <div className="text-left">
