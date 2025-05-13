@@ -11,7 +11,7 @@ function App() {
         <div className="flex items-center justify-center">
           {/* Logo WCS image */}
           <div className="mr-6 flex-shrink-0 flex items-center">
-            <img src="/wcs-logo.png" alt="Logo Wild Code School" className="w-20 h-20 object-contain" />
+            <img src={import.meta.env.BASE_URL + 'wcs-logo.png'} alt="Logo Wild Code School" className="w-20 h-20 object-contain" />
           </div>
           {/* Texte titre */}
           <div className="text-left">
