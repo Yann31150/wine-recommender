@@ -18,7 +18,7 @@ interface Wine {
 }
 
 const WineResults: React.FC = () => {
-  const [selectedWines, setSelectedWines] = useState<Wine[]>([]);
+  const [selectedWines] = useState<Wine[]>([]);
   const [selectedWine, setSelectedWine] = useState<Wine | null>(null);
   
   // Données de démonstration (à remplacer par les vraies données plus tard)
@@ -105,14 +105,6 @@ const WineResults: React.FC = () => {
     }
   ];
 
-  const toggleWineSelection = (wine: Wine) => {
-    if (selectedWines.find(w => w.id === wine.id)) {
-      setSelectedWines(selectedWines.filter(w => w.id !== wine.id));
-    } else if (selectedWines.length < 3) {
-      setSelectedWines([...selectedWines, wine]);
-    }
-  };
-
   const handleWineClick = (wine: Wine) => {
     setSelectedWine(wine);
   };
@@ -152,18 +144,19 @@ const WineResults: React.FC = () => {
                 ${selectedWines.find(w => w.id === wine.id) ? 'ring-2 ring-[#a03c50]' : ''}`}
               onClick={() => handleWineClick(wine)}
             >
-              <img 
-                src={wine.image} 
-                alt={wine.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold mb-2">{wine.name}</h3>
-                <div className="flex justify-between text-sm mb-2">
+              <div className="flex flex-col items-center p-4">
+                <img 
+                  src={wine.image} 
+                  alt={wine.name}
+                  className="w-28 h-40 object-cover rounded shadow mb-4 border-2 border-[#7b2230] bg-white"
+                  style={{ background: '#fff' }}
+                />
+                <h3 className="text-xl font-semibold mb-2 text-center">{wine.name}</h3>
+                <div className="flex justify-between text-sm mb-2 w-full">
                   <span>{wine.type}</span>
                   <span>{wine.region}</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center w-full">
                   <span className="text-lg font-bold">{wine.price}€</span>
                   <div className="flex items-center">
                     <span className="mr-2">{wine.rating}/5</span>
@@ -183,10 +176,15 @@ const WineResults: React.FC = () => {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {selectedWines.map(wine => (
-                <div key={wine.id} className="bg-[#1a0d0a] p-4 rounded-lg">
-                  <h4 className="text-lg font-semibold mb-2">{wine.name}</h4>
-                  <p className="text-sm mb-2">{wine.description}</p>
-                  <div className="flex justify-between text-sm">
+                <div key={wine.id} className="bg-[#1a0d0a] p-4 rounded-lg flex flex-col items-center">
+                  <img 
+                    src={wine.image} 
+                    alt={wine.name}
+                    className="w-20 h-32 object-cover rounded shadow mb-2 border border-[#7b2230] bg-white"
+                  />
+                  <h4 className="text-lg font-semibold mb-2 text-center">{wine.name}</h4>
+                  <p className="text-sm mb-2 text-center">{wine.description}</p>
+                  <div className="flex justify-between text-sm w-full">
                     <span>{wine.type} - {wine.region}</span>
                     <span>{wine.price}€</span>
                   </div>
@@ -206,17 +204,22 @@ const WineResults: React.FC = () => {
               {findSimilarWines(selectedWine).map(wine => (
                 <div 
                   key={wine.id} 
-                  className="bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors"
+                  className="bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors flex flex-col items-center"
                   onClick={() => handleWineClick(wine)}
                 >
-                  <h4 className="text-lg font-semibold mb-2">{wine.name}</h4>
-                  <p className="text-sm mb-2">{wine.description}</p>
-                  <div className="flex justify-between text-sm">
+                  <img 
+                    src={wine.image} 
+                    alt={wine.name}
+                    className="w-20 h-32 object-cover rounded shadow mb-2 border border-[#7b2230] bg-white"
+                  />
+                  <h4 className="text-lg font-semibold mb-2 text-center">{wine.name}</h4>
+                  <p className="text-sm mb-2 text-center">{wine.description}</p>
+                  <div className="flex justify-between text-sm w-full">
                     <span>{wine.type} - {wine.region}</span>
                     <span>{wine.price}€</span>
                   </div>
                   {wine.characteristics && (
-                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs w-full">
                       <div>Corps: {'★'.repeat(wine.characteristics.body)}</div>
                       <div>Tanins: {'★'.repeat(wine.characteristics.tannins)}</div>
                       <div>Acidité: {'★'.repeat(wine.characteristics.acidity)}</div>
