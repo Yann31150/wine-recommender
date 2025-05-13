@@ -9,11 +9,17 @@ interface Wine {
   rating: number;
   image: string;
   description: string;
+  characteristics?: {
+    body: number;
+    tannins: number;
+    acidity: number;
+    sweetness: number;
+  };
 }
 
 const WineResults: React.FC = () => {
-  // État pour les vins sélectionnés pour comparaison
   const [selectedWines, setSelectedWines] = useState<Wine[]>([]);
+  const [selectedWine, setSelectedWine] = useState<Wine | null>(null);
   
   // Données de démonstration (à remplacer par les vraies données plus tard)
   const demoWines: Wine[] = [
@@ -25,7 +31,13 @@ const WineResults: React.FC = () => {
       price: 850,
       rating: 4.8,
       image: "https://placehold.co/200x300/7b2230/f5e9dc?text=Château+Margaux",
-      description: "Grand cru classé de Margaux, ce vin rouge est réputé pour sa complexité et son élégance."
+      description: "Grand cru classé de Margaux, ce vin rouge est réputé pour sa complexité et son élégance.",
+      characteristics: {
+        body: 4,
+        tannins: 5,
+        acidity: 3,
+        sweetness: 2
+      }
     },
     {
       id: 2,
@@ -35,7 +47,61 @@ const WineResults: React.FC = () => {
       price: 15000,
       rating: 4.9,
       image: "https://placehold.co/200x300/7b2230/f5e9dc?text=DRC",
-      description: "Un des vins les plus prestigieux de Bourgogne, connu pour sa finesse et sa complexité."
+      description: "Un des vins les plus prestigieux de Bourgogne, connu pour sa finesse et sa complexité.",
+      characteristics: {
+        body: 3,
+        tannins: 4,
+        acidity: 4,
+        sweetness: 2
+      }
+    },
+    {
+      id: 3,
+      name: "Château Lafite Rothschild 2016",
+      type: "Rouge",
+      region: "Bordeaux",
+      price: 1200,
+      rating: 4.7,
+      image: "https://placehold.co/200x300/7b2230/f5e9dc?text=Lafite",
+      description: "Premier grand cru classé de Pauillac, un vin d'une grande finesse et d'une longue garde.",
+      characteristics: {
+        body: 4,
+        tannins: 5,
+        acidity: 3,
+        sweetness: 2
+      }
+    },
+    {
+      id: 4,
+      name: "Château Haut-Brion 2017",
+      type: "Rouge",
+      region: "Bordeaux",
+      price: 950,
+      rating: 4.6,
+      image: "https://placehold.co/200x300/7b2230/f5e9dc?text=Haut-Brion",
+      description: "Premier grand cru classé de Pessac-Léognan, un vin puissant et complexe.",
+      characteristics: {
+        body: 5,
+        tannins: 4,
+        acidity: 3,
+        sweetness: 2
+      }
+    },
+    {
+      id: 5,
+      name: "Château Mouton Rothschild 2018",
+      type: "Rouge",
+      region: "Bordeaux",
+      price: 1100,
+      rating: 4.7,
+      image: "https://placehold.co/200x300/7b2230/f5e9dc?text=Mouton",
+      description: "Premier grand cru classé de Pauillac, un vin riche et opulent.",
+      characteristics: {
+        body: 4,
+        tannins: 5,
+        acidity: 3,
+        sweetness: 2
+      }
     }
   ];
 
@@ -45,6 +111,29 @@ const WineResults: React.FC = () => {
     } else if (selectedWines.length < 3) {
       setSelectedWines([...selectedWines, wine]);
     }
+  };
+
+  const handleWineClick = (wine: Wine) => {
+    setSelectedWine(wine);
+  };
+
+  // Fonction pour trouver les vins similaires (à remplacer par l'algorithme de recommandation)
+  const findSimilarWines = (wine: Wine): Wine[] => {
+    return demoWines
+      .filter(w => w.id !== wine.id)
+      .sort((a, b) => {
+        // Calcul simple de similarité basé sur les caractéristiques
+        const similarityA = Math.abs((a.characteristics?.body || 0) - (wine.characteristics?.body || 0)) +
+                          Math.abs((a.characteristics?.tannins || 0) - (wine.characteristics?.tannins || 0)) +
+                          Math.abs((a.characteristics?.acidity || 0) - (wine.characteristics?.acidity || 0)) +
+                          Math.abs((a.characteristics?.sweetness || 0) - (wine.characteristics?.sweetness || 0));
+        const similarityB = Math.abs((b.characteristics?.body || 0) - (wine.characteristics?.body || 0)) +
+                          Math.abs((b.characteristics?.tannins || 0) - (wine.characteristics?.tannins || 0)) +
+                          Math.abs((b.characteristics?.acidity || 0) - (wine.characteristics?.acidity || 0)) +
+                          Math.abs((b.characteristics?.sweetness || 0) - (wine.characteristics?.sweetness || 0));
+        return similarityA - similarityB;
+      })
+      .slice(0, 5);
   };
 
   return (
@@ -61,7 +150,7 @@ const WineResults: React.FC = () => {
               key={wine.id}
               className={`bg-[#2d0a12] rounded-lg overflow-hidden shadow-lg transition-transform duration-200 hover:scale-105 cursor-pointer
                 ${selectedWines.find(w => w.id === wine.id) ? 'ring-2 ring-[#a03c50]' : ''}`}
-              onClick={() => toggleWineSelection(wine)}
+              onClick={() => handleWineClick(wine)}
             >
               <img 
                 src={wine.image} 
@@ -101,6 +190,39 @@ const WineResults: React.FC = () => {
                     <span>{wine.type} - {wine.region}</span>
                     <span>{wine.price}€</span>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Section des vins similaires */}
+        {selectedWine && (
+          <div className="mt-12 bg-[#2d0a12] rounded-lg p-6">
+            <h3 className="text-2xl font-serif font-semibold mb-6 text-[#7b2230]">
+              Vins similaires à {selectedWine.name}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {findSimilarWines(selectedWine).map(wine => (
+                <div 
+                  key={wine.id} 
+                  className="bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors"
+                  onClick={() => handleWineClick(wine)}
+                >
+                  <h4 className="text-lg font-semibold mb-2">{wine.name}</h4>
+                  <p className="text-sm mb-2">{wine.description}</p>
+                  <div className="flex justify-between text-sm">
+                    <span>{wine.type} - {wine.region}</span>
+                    <span>{wine.price}€</span>
+                  </div>
+                  {wine.characteristics && (
+                    <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
+                      <div>Corps: {'★'.repeat(wine.characteristics.body)}</div>
+                      <div>Tanins: {'★'.repeat(wine.characteristics.tannins)}</div>
+                      <div>Acidité: {'★'.repeat(wine.characteristics.acidity)}</div>
+                      <div>Sucre: {'★'.repeat(wine.characteristics.sweetness)}</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
