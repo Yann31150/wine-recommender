@@ -216,7 +216,7 @@ const WineResults: React.FC = () => {
               Vins similaires à {selectedWine.name}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {findSimilarWines(selectedWine).map((wine, idx) => (
+              {findSimilarWines(selectedWine).map(wine => (
                 <div 
                   key={wine.id} 
                   className={`bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors flex flex-col items-center ${wine.type === 'Sans alcool' ? 'ring-2 ring-[#ff4a7d] border-2 border-[#ff4a7d]' : ''}`}
