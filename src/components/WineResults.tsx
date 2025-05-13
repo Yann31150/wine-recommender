@@ -102,6 +102,17 @@ const WineResults: React.FC = () => {
         acidity: 3,
         sweetness: 2
       }
+    },
+    {
+      id: 6,
+      name: "Pierre Zéro Prestige",
+      type: "Sans alcool",
+      region: "Languedoc-Roussillon",
+      price: 12,
+      rating: 4.2,
+      image: "https://placehold.co/200x300/7b2230/f5e9dc?text=Pierre+Zero",
+      description: "Vin effervescent sans alcool, idéal pour profiter de l'expérience du vin sans modération.",
+      characteristics: { body: 2, tannins: 1, acidity: 3, sweetness: 4 }
     }
   ];
 
@@ -111,8 +122,8 @@ const WineResults: React.FC = () => {
 
   // Fonction pour trouver les vins similaires (à remplacer par l'algorithme de recommandation)
   const findSimilarWines = (wine: Wine): Wine[] => {
-    return demoWines
-      .filter(w => w.id !== wine.id)
+    const similar = demoWines
+      .filter(w => w.id !== wine.id && w.type !== 'Sans alcool')
       .sort((a, b) => {
         // Calcul simple de similarité basé sur les caractéristiques
         const similarityA = Math.abs((a.characteristics?.body || 0) - (wine.characteristics?.body || 0)) +
@@ -125,7 +136,11 @@ const WineResults: React.FC = () => {
                           Math.abs((b.characteristics?.sweetness || 0) - (wine.characteristics?.sweetness || 0));
         return similarityA - similarityB;
       })
-      .slice(0, 5);
+      .slice(0, 4);
+    // Ajoute toujours un vin sans alcool en suggestion
+    const nonAlcoholic = demoWines.find(w => w.type === 'Sans alcool');
+    if (nonAlcoholic) similar.push(nonAlcoholic);
+    return similar;
   };
 
   return (
@@ -201,10 +216,10 @@ const WineResults: React.FC = () => {
               Vins similaires à {selectedWine.name}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {findSimilarWines(selectedWine).map(wine => (
+              {findSimilarWines(selectedWine).map((wine, idx) => (
                 <div 
                   key={wine.id} 
-                  className="bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors flex flex-col items-center"
+                  className={`bg-[#1a0d0a] p-4 rounded-lg cursor-pointer hover:bg-[#3d1a22] transition-colors flex flex-col items-center ${wine.type === 'Sans alcool' ? 'ring-2 ring-[#ff4a7d] border-2 border-[#ff4a7d]' : ''}`}
                   onClick={() => handleWineClick(wine)}
                 >
                   <img 
@@ -212,7 +227,12 @@ const WineResults: React.FC = () => {
                     alt={wine.name}
                     className="w-20 h-32 object-cover rounded shadow mb-2 border border-[#7b2230] bg-white"
                   />
-                  <h4 className="text-lg font-semibold mb-2 text-center">{wine.name}</h4>
+                  <h4 className="text-lg font-semibold mb-2 text-center flex items-center gap-2">
+                    {wine.name}
+                    {wine.type === 'Sans alcool' && (
+                      <span className="bg-[#ff4a7d] text-white text-xs px-2 py-1 rounded-full ml-2">Sans alcool</span>
+                    )}
+                  </h4>
                   <p className="text-sm mb-2 text-center">{wine.description}</p>
                   <div className="flex justify-between text-sm w-full">
                     <span>{wine.type} - {wine.region}</span>
