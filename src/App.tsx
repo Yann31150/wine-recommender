@@ -8,12 +8,10 @@ function App() {
     <div className="min-h-screen bg-[#1a0d0a]">
       {/* Header façon Wild Code School */}
       <header className="flex items-center justify-center py-8 bg-[#1a0d0a]">
-        {/* Logo stylisé */}
+        {/* Logo W Wild Code School exact */}
         <div className="mr-6">
-          {/* Logo Wild façon WCS */}
-          <svg width="70" height="40" viewBox="0 0 140 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 40 Q10 10 40 40 T70 40 Q70 10 100 40 T130 40" stroke="#ff4a7d" strokeWidth="8" fill="none" strokeLinecap="round"/>
-            <path d="M40 40 Q40 70 70 40 Q70 70 100 40" stroke="#ff4a7d" strokeWidth="8" fill="none" strokeLinecap="round"/>
+          <svg width="120" height="48" viewBox="0 0 300 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.5 18.5C18.5 18.5 18.5 101.5 58.5 101.5C98.5 101.5 98.5 18.5 98.5 18.5C98.5 18.5 98.5 101.5 138.5 101.5C178.5 101.5 178.5 18.5 178.5 18.5C178.5 18.5 178.5 101.5 218.5 101.5C258.5 101.5 258.5 18.5 258.5 18.5" stroke="#ff4a7d" strokeWidth="16" strokeLinecap="round" fill="none"/>
           </svg>
         </div>
         {/* Texte titre */}
